@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewModels="clr-namespace:CarContol.ViewModels" xmlns:controls="clr-namespace:CarController.Controls"
+             x:Class="CarController.Views.BluetoothSettingsPage">
+    <ContentPage.BindingContext>
+        <viewModels:BluetoothSettingsViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+
+        <StackLayout>
+            <RefreshView IsRefreshing="{Binding IsLoading}"
+                Command="{Binding InitializeBluetoothAdapterCommand}">
+                <ListView ItemsSource="{Binding BluetoothSettingsModels, Mode=OneWay}"
+                      SelectedItem="{Binding BluetoothSettingsModel, Mode=TwoWay}"
+                      VerticalScrollBarVisibility="Default">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:ExtendedViewCell SelectedBackgroundColor="{StaticResource Primary}">
+                                <ViewCell.View>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Column="0" 
+                                           Padding="10, 0, 0, 0"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start"
+                                           Text="{Binding ConnectionId}" 
+                                           FontSize="Small" 
+                                           TextColor="Black" />
+
+                                        <Label Grid.Column="1" 
+                                           Padding="0, 0, 10, 0"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End"
+                                           Text="{Binding DeviceName}" 
+                                           FontSize="Small" 
+                                           TextColor="Black"/>
+                                    </Grid>
+                                </ViewCell.View>
+                            </controls:ExtendedViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RefreshView>
+            <Label Text="{Binding Errors}"
+                   TextColor="{StaticResource Primary}"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding Info}"
+                   TextColor="{StaticResource Primary}"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
+            <Button Text="Connect"
+                        Command="{Binding ConnectCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
