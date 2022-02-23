@@ -24,7 +24,8 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent Title="Main" Icon="xamarin_logo.png" ContentTemplate="{DataTemplate local:MainPage}" />
-        <ShellContent Title="Browse" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:BluetoothSettingsPage}" />
+        <ShellContent Title="Planner" Icon="xamarin_logo.png" ContentTemplate="{DataTemplate local:CarPlannerPage}" />
+        <ShellContent Title="Manual" Icon="xamarin_logo.png" ContentTemplate="{DataTemplate local:MainPage}" />
+        <ShellContent Title="Connections" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:BluetoothSettingsPage}" />
     </TabBar>
 </Shell>

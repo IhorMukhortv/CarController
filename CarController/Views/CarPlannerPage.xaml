@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewModels="clr-namespace:CarController.ViewModels" xmlns:controls="clr-namespace:CarController.Controls" xmlns:models="clr-namespace:CarController.Models"
+             x:Class="CarController.Views.CarPlannerPage"
+             x:Name="carPlannerPage">
+    <ContentPage.BindingContext>
+        <viewModels:CarPlannerViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" 
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Text="ᐃ"
+                            Command="{Binding ChangeActionDirectionCommand}">
+                        <Button.CommandParameter>
+                            <models:DirectionType>
+                                Up
+                            </models:DirectionType>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Grid.Row="1"  
+                            Grid.Column="0"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Text="ᐊ" 
+                            Command="{Binding ChangeActionDirectionCommand}">
+                        <Button.CommandParameter>
+                            <models:DirectionType>
+                                Left
+                            </models:DirectionType>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Grid.Row="1"  
+                            Grid.Column="2"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Text="ᐅ" 
+                            Command="{Binding ChangeActionDirectionCommand}">
+                        <Button.CommandParameter>
+                            <models:DirectionType>
+                                Right
+                            </models:DirectionType>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Grid.Row="2"  
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Text="ᐁ"
+                            Command="{Binding ChangeActionDirectionCommand}">
+                        <Button.CommandParameter>
+                            <models:DirectionType>
+                                Down
+                            </models:DirectionType>
+                        </Button.CommandParameter>
+                    </Button>
+
+                    <Label Grid.Row="0"  
+                           Grid.Column="3"
+                           Text="{Binding LastActionDirectionSelected, Mode=TwoWay}"
+                           TextColor="{StaticResource Primary}"
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand" />
+
+                    <Entry Grid.Row="1"  
+                           Grid.Column="3"
+                           Placeholder="Please enter distance"
+                           Text="{Binding ActionDistance, Mode=TwoWay}"
+                           ClearButtonVisibility="WhileEditing"
+                           BackgroundColor="{StaticResource Primary}"
+                           TextColor="White" 
+                           Keyboard="Numeric"/>
+
+                    <Button Text="Add action"
+                            Grid.Row="2"  
+                            Grid.Column="3"
+                            Command="{Binding AddActionCommand, Mode=OneWay}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"/> 
+                </Grid>
+            </StackLayout>
+            <ListView ItemsSource="{Binding Actions, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+                      VerticalScrollBarVisibility="Default">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:ExtendedViewCell SelectedBackgroundColor="{StaticResource Primary}">
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Delete"                                     
+                                          Command="{Binding Source={x:Reference carPlannerPage}, Path=BindingContext.DeleteActionCommand}"
+                                          CommandParameter="{Binding .}">
+                                </MenuItem>
+                            </ViewCell.ContextActions>
+                            <ViewCell.View>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" 
+                                           Padding="10, 0, 0, 0"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start"
+                                           Text="{Binding Direction}" 
+                                           FontSize="Small" 
+                                           TextColor="Black" />
+
+                                    <Label Grid.Column="1" 
+                                           Padding="0, 0, 10, 0"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End"
+                                           Text="{Binding Distance}" 
+                                           FontSize="Small" 
+                                           TextColor="Black"/>
+                                </Grid>
+                            </ViewCell.View>
+                        </controls:ExtendedViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

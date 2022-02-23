@@ -8,6 +8,7 @@ namespace CarController
 		public AppShell()
 		{
 			InitializeComponent();
+			Routing.RegisterRoute(nameof(CarPlannerPage), typeof(CarPlannerPage));
 			Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
 			Routing.RegisterRoute(nameof(BluetoothSettingsPage), typeof(BluetoothSettingsPage));
 		}

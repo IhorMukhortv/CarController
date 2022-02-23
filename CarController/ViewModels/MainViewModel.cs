@@ -1,11 +1,9 @@
-﻿using CarController.Infrastructure.Background;
-using CarController.Infrastructure.Providers;
+﻿using CarController.Infrastructure.Providers;
 using CarController.Models;
 using CarController.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -20,19 +18,14 @@ namespace CarContol.ViewModels
 
 		private IList<DirectionType> _sendCommandsList = new List<DirectionType>() { DirectionType.None, DirectionType.None };
 
-		private readonly DataSender _dataSender;
-
 		public MainViewModel()
 		{
-			_dataSender = new DataSender(async () => await SendCommandsAsync());
 			Initialize();
 		}
 
 		public ICommand RightLeftCommand => new Command((x) => ClickedOnDirectionAsync((DirectionType)x, false));
 
 		public ICommand UpDownCommand => new Command((x) => ClickedOnDirectionAsync((DirectionType)x, true));
-
-		public ICommand RefreshCommand => new Command((x) => RefreshAsync());
 
 		public string Errors
 		{
@@ -81,38 +74,31 @@ namespace CarContol.ViewModels
 			}
 		}
 
-		private async void RefreshAsync()
-		{
-			IsLoading = true;
-			await InitialaizeConnection();
-			_dataSender.StartSending();
-			IsLoading = false;
-		}
-
 		private async void ClickedOnDirectionAsync(DirectionType direction, bool isUpDown)
 		{
 			var indexChanged = isUpDown ? 0 : 1;
 			_sendCommandsList[indexChanged] = direction;
-			await SendCommandInternalAsync();
-		}		
-
-		private async Task SendCommandsAsync()
-		{
-			while (true)
-			{
-				await SendCommandInternalAsync();
-			}
+			await SendCommandAsync();
 		}
 
-		private async Task SendCommandInternalAsync()
+		private async Task<bool> SendCommandAsync()
 		{
-			var sendCommand = string.Join(";", _sendCommandsList.Select(x => ((int)x).ToString()));
-			if (!await BluetoothConnectionProvider.SendMessageAsync(sendCommand))
+			try
 			{
-				_dataSender.StopSending();
+				return await SendCommandInternalAsync(_sendCommandsList);
+			}
+			catch
+			{
+				await BluetoothConnectionProvider.ConnectToDeviceFromPreferences();
 			}
 
-			await Task.Delay(200);
+			return true;
+		}
+
+		private Task<bool> SendCommandInternalAsync(IList<DirectionType> sendCommandsList)
+		{
+			var sendCommandData = string.Join(";", sendCommandsList.Select(x => ((int)x).ToString()));
+			return BluetoothConnectionProvider.SendMessageAsync(sendCommandData);
 		}
 	}
 }
